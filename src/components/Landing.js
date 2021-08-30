@@ -1,37 +1,51 @@
 import React, { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import styled from "styled-components";
+import { useAuth } from "../util/use-auth";
 
-const Landing = ({ handleSearch, user }) => {
+const Landing = ({ handleSearch }) => {
   const [landingSearch, setLandingSearch] = useState(null);
+
+  const auth = useAuth();
+  const history = useHistory();
 
   const handleSubmit = (e) => {
     e.preventDefault();
     handleSearch(landingSearch);
-    if (user) {
+    if (auth.user) {
+      history.push("/listings");
+    } else {
+      history.push("/login");
     }
   };
 
   return (
     <div>
-      <form onSubmit={handleSubmit}>
-        <FormField>
-          <Label htmlFor="username">Username:</Label>
-          <Input
-            type="text"
-            id="username"
-            autoComplete="off"
-            value={landingSearch}
-            onChange={(e) => setLandingSearch(e.target.value)}
-          />
-        </FormField>
-        <FormField>
-          <Button type="submit">Search</Button>
-        </FormField>
-      </form>
+      <Container>
+        <form onSubmit={handleSubmit}>
+          <FormField>
+            <Label htmlFor="username">Where are we going?</Label>
+            <Input
+              type="text"
+              id="search"
+              autoComplete="off"
+              value={landingSearch}
+              onChange={(e) => setLandingSearch(e.target.value)}
+            />
+          </FormField>
+          <FormField>
+            <Button type="submit">Search</Button>
+          </FormField>
+        </form>
+      </Container>
     </div>
   );
 };
+
+const Container = styled.div`
+  margin: 20vh auto;
+  max-width: 700px;
+`;
 
 const FormField = styled.div`
   &:not(:last-child) {

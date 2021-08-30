@@ -1,5 +1,6 @@
 // Hook (use-auth.js)
 import React, { useState, useContext, createContext } from "react";
+import { useHistory } from "react-router-dom";
 
 const authContext = createContext();
 // Provider component that wraps your app and makes auth object ...
@@ -20,7 +21,7 @@ function useProvideAuth() {
   const [isLoading, setIsLoading] = useState(false);
   // Wrap any Firebase methods we want to use making sure ...
   //   // ... to save the user to state.
-  const signin = (username, password) => {
+  function signin(username, password) {
     setIsLoading(true);
     fetch("/login", {
       method: "POST",
@@ -36,8 +37,8 @@ function useProvideAuth() {
         r.json().then((err) => setErrors(err.errors));
       }
     });
-  };
-  const signup = (signUpData) => {
+  }
+  function signup(signUpData) {
     setErrors([]);
     setIsLoading(true);
     fetch("/signup", {
@@ -54,21 +55,21 @@ function useProvideAuth() {
         r.json().then((err) => setErrors(err.errors));
       }
     });
-  };
-  const signout = () => {
+  }
+  function signout() {
     fetch("/logout", { method: "DELETE" }).then((r) => {
       if (r.ok) {
         setUser(null);
       }
     });
-  };
-  const autoSignIn = () => {
+  }
+  function autoSignIn() {
     fetch("/me").then((r) => {
       if (r.ok) {
         r.json().then((user) => setUser(user));
       }
     });
-  };
+  }
 
   // Return the user object and auth methods
   return {

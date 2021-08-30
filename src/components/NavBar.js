@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Link, useLocation } from "react-router-dom";
+import { NavLink, Link, useLocation } from "react-router-dom";
 import { useAuth } from "../util/use-auth";
 
 const NavBar = () => {
@@ -18,7 +18,9 @@ const NavBar = () => {
   //   let location = useLocation();
   return (
     <Container>
-      <h1>AHOY</h1>
+      <NavLink to="/">
+        <h1>AHOY</h1>
+      </NavLink>
 
       {!auth.user ? (
         <Nav>

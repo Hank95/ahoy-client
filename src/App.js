@@ -13,10 +13,8 @@ import Login from "./components/Login";
 import Listings from "./components/Listings";
 
 function App() {
-  // const [user, setUser] = useState(null);
-  let location = useLocation();
+  const [search, setSearch] = useState(null);
 
-  const history = useHistory();
   const auth = useAuth();
   useEffect(() => {
     // auto-login
@@ -26,9 +24,10 @@ function App() {
     //   }
     // });
     auth.autoSignIn();
-  }, [auth]);
+  }, []);
 
   console.log(auth.user);
+  console.log(search);
   // let background = location.state && location.state.background;
 
   return (
@@ -39,10 +38,10 @@ function App() {
           <Login />
         </Route>
         <Route exact path="/">
-          <Landing />
+          <Landing handleSearch={setSearch} />
         </Route>
         <PrivateRoute path="/listings">
-          <Listings />
+          <Listings search={search} setSearch={setSearch} />
         </PrivateRoute>
       </Switch>
       {/* {background && <Route path="/login" children={<Login />} />} */}

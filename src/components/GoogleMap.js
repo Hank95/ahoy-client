@@ -15,7 +15,7 @@ const GoogleMap = ({ placeName }) => {
 
   const createGoogleMap = (coordinates) => {
     googleMap = new window.google.maps.Map(googleMapRef.current, {
-      zoom: 16,
+      zoom: 12,
       center: {
         lat: coordinates.lat(),
         lng: coordinates.lng(),
@@ -30,6 +30,7 @@ const GoogleMap = ({ placeName }) => {
       function (results, status) {
         if (status === window.google.maps.GeocoderStatus.OK) {
           placeId = results[0].place_id;
+          console.log(placeId);
           createGoogleMap(results[0].geometry.location);
           lat = results[0].geometry.location.lat();
           lng = results[0].geometry.location.lng();
@@ -47,13 +48,7 @@ const GoogleMap = ({ placeName }) => {
       }
     );
   };
-  return (
-    <div
-      id="google-map"
-      ref={googleMapRef}
-      style={{ width: "400px", height: "300px" }}
-    />
-  );
+  return <div id="google-map" ref={googleMapRef} style={{ height: "100vh" }} />;
 };
 
 export default GoogleMap;

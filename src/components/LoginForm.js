@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { useAuth } from "../util/use-auth";
+import { useHistory } from "react-router-dom";
 
 function LoginForm({ onLogin }) {
   const [username, setUsername] = useState("");
@@ -8,10 +9,13 @@ function LoginForm({ onLogin }) {
   //   const [errors, setErrors] = useState([]);
   //   const [isLoading, setIsLoading] = useState(false);
   const auth = useAuth();
+  const history = useHistory();
 
   function handleSubmit(e) {
     e.preventDefault();
     auth.signin(username, password);
+    history.push("/");
+
     // setIsLoading(true);
     // fetch("/login", {
     //   method: "POST",
