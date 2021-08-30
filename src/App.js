@@ -1,25 +1,74 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState } from "react";
+import { useAuth } from "./util/use-auth";
+import {
+  Switch,
+  Route,
+  useHistory,
+  useLocation,
+  Redirect,
+} from "react-router-dom";
+import Landing from "./components/Landing";
+import NavBar from "./components/NavBar";
+import Login from "./components/Login";
+import Listings from "./components/Listings";
 
 function App() {
+  // const [user, setUser] = useState(null);
+  let location = useLocation();
+
+  const history = useHistory();
+  const auth = useAuth();
+  useEffect(() => {
+    // auto-login
+    // fetch("/me").then((r) => {
+    //   if (r.ok) {
+    //     r.json().then((user) => setUser(user));
+    //   }
+    // });
+    auth.autoSignIn();
+  }, [auth]);
+
+  console.log(auth.user);
+  // let background = location.state && location.state.background;
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <NavBar />
+      <Switch>
+        <Route path="/login">
+          <Login />
+        </Route>
+        <Route exact path="/">
+          <Landing />
+        </Route>
+        <PrivateRoute path="/listings">
+          <Listings />
+        </PrivateRoute>
+      </Switch>
+      {/* {background && <Route path="/login" children={<Login />} />} */}
     </div>
   );
 }
 
 export default App;
+
+function PrivateRoute({ children, ...rest }) {
+  let auth = useAuth();
+  return (
+    <Route
+      {...rest}
+      render={({ location }) =>
+        auth.user ? (
+          children
+        ) : (
+          <Redirect
+            to={{
+              pathname: "/login",
+              state: { from: location },
+            }}
+          />
+        )
+      }
+    />
+  );
+}
