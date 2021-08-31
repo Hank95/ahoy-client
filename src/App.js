@@ -28,6 +28,8 @@ function App() {
 
   console.log(auth.user);
   console.log(search);
+  console.log(process.env.REACT_APP_API_ENDPOINT);
+  console.log(process.env.REACT_APP_API_KEY);
   // let background = location.state && location.state.background;
 
   return (

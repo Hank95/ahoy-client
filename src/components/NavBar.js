@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { NavLink, Link, useLocation } from "react-router-dom";
 import { useAuth } from "../util/use-auth";
+import UserMenu from "./UserMenu";
 
 const NavBar = () => {
   const auth = useAuth();
@@ -29,6 +30,7 @@ const NavBar = () => {
           </NavButton>
         </Nav>
       ) : (
+        // <UserMenu />
         <Nav>
           <NavButton as={Link} to="/listings ">
             Boats

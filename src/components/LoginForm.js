@@ -16,6 +16,8 @@ function LoginForm({ onLogin }) {
     auth.signin(username, password);
     history.push("/");
 
+    // history.push("/");
+
     // setIsLoading(true);
     // fetch("/login", {
     //   method: "POST",

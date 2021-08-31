@@ -1,11 +1,12 @@
 import styled from "styled-components";
 import GoogleMap from "./GoogleMap";
+// import Map from "./Map";
 
 const Listings = ({ boats, search, setSearch }) => {
   return (
     <Container>
       <div>Listings</div>
-      <GoogleMap placeName={search} />
+      <GoogleMap search={search} setSearch={setSearch} />
     </Container>
   );
 };

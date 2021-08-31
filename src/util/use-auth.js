@@ -2,6 +2,8 @@
 import React, { useState, useContext, createContext } from "react";
 import { useHistory } from "react-router-dom";
 
+const API_KEY = process.env.REACT_APP_API_ENDPOINT;
+
 const authContext = createContext();
 // Provider component that wraps your app and makes auth object ...
 // ... available to any child component that calls useAuth().
@@ -19,11 +21,11 @@ function useProvideAuth() {
   const [user, setUser] = useState(null);
   const [errors, setErrors] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  // Wrap any Firebase methods we want to use making sure ...
-  //   // ... to save the user to state.
+  const history = useHistory();
+
   function signin(username, password) {
     setIsLoading(true);
-    fetch(`${process.env.API_ENDPOINT}/login`, {
+    fetch(`${API_KEY}/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -32,7 +34,9 @@ function useProvideAuth() {
     }).then((r) => {
       setIsLoading(false);
       if (r.ok) {
-        r.json().then((user) => setUser(user));
+        r.json().then((user) => {
+          setUser(user);
+        });
       } else {
         r.json().then((err) => setErrors(err.errors));
       }
@@ -41,7 +45,7 @@ function useProvideAuth() {
   function signup(signUpData) {
     setErrors([]);
     setIsLoading(true);
-    fetch(`${process.env.API_ENDPOINT}/signup`, {
+    fetch(`${API_KEY}/signup`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -50,23 +54,23 @@ function useProvideAuth() {
     }).then((r) => {
       setIsLoading(false);
       if (r.ok) {
-        r.json().then((user) => setUser(user));
+        r.json()
+          .then((user) => setUser(user))
+          .then(() => history.push("/"));
       } else {
         r.json().then((err) => setErrors(err.errors));
       }
     });
   }
   function signout() {
-    fetch(`${process.env.API_ENDPOINT}/logout`, { method: "DELETE" }).then(
-      (r) => {
-        if (r.ok) {
-          setUser(null);
-        }
+    fetch(`${API_KEY}/logout`, { method: "DELETE" }).then((r) => {
+      if (r.ok) {
+        setUser(null).then(() => history.push("/"));
       }
-    );
+    });
   }
   function autoSignIn() {
-    fetch(`${process.env.API_ENDPOINT}/me`).then((r) => {
+    fetch(`${API_KEY}/me`).then((r) => {
       if (r.ok) {
         r.json().then((user) => setUser(user));
       }
