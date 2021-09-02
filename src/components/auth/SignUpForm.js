@@ -1,64 +1,77 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { useAuth } from "../util/use-auth";
-import { useHistory } from "react-router-dom";
+import { useAuth } from "../../util/use-auth";
 
-function LoginForm({ onLogin }) {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  //   const [errors, setErrors] = useState([]);
-  //   const [isLoading, setIsLoading] = useState(false);
+function SignUpForm({ onLogin }) {
+  const [signUpData, setSignUpData] = useState({
+    email: "",
+    username: "",
+    password: "",
+    password_confirmation: "",
+    join_date: "",
+  });
+  const today = new Date();
+
   const auth = useAuth();
-  const history = useHistory();
 
   function handleSubmit(e) {
     e.preventDefault();
-    auth.signin(username, password);
-    history.push("/");
-
-    // history.push("/");
-
-    // setIsLoading(true);
-    // fetch("/login", {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: JSON.stringify({ username, password }),
-    // }).then((r) => {
-    //   setIsLoading(false);
-    //   if (r.ok) {
-    //     r.json().then((user) => onLogin(user));
-    //   } else {
-    //     r.json().then((err) => setErrors(err.errors));
-    //   }
-    // });
+    auth.signup(signUpData);
+  }
+  function handleChange(event) {
+    setSignUpData({
+      ...signUpData,
+      [event.target.name]: event.target.value,
+    });
   }
 
   return (
     <form onSubmit={handleSubmit}>
       <FormField>
-        <Label htmlFor="username">Username:</Label>
+        <Label htmlFor="email">Email</Label>
+        <Input
+          type="email"
+          name="email"
+          autoComplete="off"
+          value={signUpData.email}
+          onChange={handleChange}
+        />
+      </FormField>
+      <FormField>
+        <Label htmlFor="username">Username</Label>
         <Input
           type="text"
-          id="username"
+          name="username"
           autoComplete="off"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
+          value={signUpData.username}
+          onChange={handleChange}
         />
       </FormField>
       <FormField>
-        <Label htmlFor="password">Password:</Label>
+        <Label htmlFor="password">Password</Label>
         <Input
           type="password"
-          id="password"
+          name="password"
+          value={signUpData.password}
+          onChange={handleChange}
           autoComplete="current-password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
         />
       </FormField>
       <FormField>
-        <Button type="submit">{auth.isLoading ? "Loading..." : "Login"}</Button>
+        <Label htmlFor="password">Password Confirmation</Label>
+        <Input
+          type="password"
+          name="password_confirmation"
+          value={signUpData.passwordConfirmation}
+          onChange={handleChange}
+          autoComplete="current-password"
+        />
+      </FormField>
+      <input type="hidden" name="join_date" value={today}></input>
+      <FormField>
+        <Button type="submit">
+          {auth.isLoading ? "Loading..." : "Sign Up"}
+        </Button>
       </FormField>
       <FormField>
         {auth.errors.map((err) => (
@@ -98,6 +111,7 @@ const Input = styled.input`
   line-height: 1.5;
   padding: 4px;
 `;
+
 const Button = styled.button`
   cursor: pointer;
   font-size: 1.3rem;
@@ -115,4 +129,5 @@ const Button = styled.button`
     text-decoration: none;
   }
 `;
-export default LoginForm;
+
+export default SignUpForm;

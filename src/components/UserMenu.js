@@ -2,93 +2,64 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../util/use-auth";
 import styled from "styled-components";
-import burger from "./assets/burger.svg";
+import arrow from "./assets/arrow.svg";
+import menu from "./assets/menu.svg";
 
 const UserMenu = () => {
   const [isClicked, setIsClicked] = useState(false);
 
   const auth = useAuth();
 
+  const handleClick = () => {
+    setIsClicked(false);
+  };
+
   return (
     <div>
       {isClicked ? (
         <Container>
+          <Burger>
+            <img src={arrow} alt="burger" onClick={handleClick} />
+          </Burger>
           <GridItem>
-            <a>
-              <svg
-                width="50"
-                height="30"
-                fill="none"
-                viewBox="0 0 24 24"
-                onClick={() => setIsClicked(false)}
-              >
-                <path
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="1.5"
-                  d="M13.75 6.75L19.25 12L13.75 17.25"
-                ></path>
-                <path
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="1.5"
-                  d="M19 12H4.75"
-                ></path>
-              </svg>
-            </a>
-          </GridItem>
-          <GridItem>
-            <Link to="/"> Home</Link>
-          </GridItem>
-          <GridItem>
-            <Link to="/"> Bookings</Link>
-          </GridItem>
-          <GridItem>
-            <Link to="/"> Add a Boat</Link>
-          </GridItem>
-          <GridItem>
-            <Link to="/" onClick={() => auth.signout()}>
+            <Link to="/" onClick={handleClick}>
               {" "}
+              Home
+            </Link>
+          </GridItem>
+          <GridItem>
+            <Link to="/" onClick={handleClick}>
+              {" "}
+              Bookings
+            </Link>
+          </GridItem>
+          <GridItem>
+            <Link to="/add-a-boat" onClick={handleClick}>
+              {" "}
+              Add a Boat
+            </Link>
+          </GridItem>
+          <GridItem>
+            <Link to="/my-boats" onClick={handleClick}>
+              {" "}
+              My Boats
+            </Link>
+          </GridItem>
+          <GridItem>
+            <Link
+              to="/"
+              onClick={() => {
+                auth.signout();
+                handleClick();
+              }}
+            >
               Logout
             </Link>
           </GridItem>
         </Container>
       ) : (
         <Burger>
-          <a>
-            <svg
-              id="burger-menu"
-              width="50"
-              height="50"
-              fill="none"
-              viewBox="0 0 24 24"
-              onClick={() => setIsClicked(true)}
-            >
-              <path
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="1.5"
-                d="M4.75 5.75H19.25"
-              />
-              <path
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="1.5"
-                d="M4.75 18.25H19.25"
-              />
-              <path
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="1.5"
-                d="M4.75 12H19.25"
-              />
-            </svg>
-          </a>
+          <img src={menu} alt="menu" onClick={() => setIsClicked(true)} />
         </Burger>
       )}
     </div>
@@ -97,21 +68,28 @@ const UserMenu = () => {
 
 const Container = styled.div`
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
+  border-radius: 6px;
 `;
 const GridItem = styled.div`
   font-size: 15pt;
-  height: 100px;
+  padding: 10px;
+  /* height: 100px; */
   width: auto;
   position: relative;
   align-content: center;
   text-align: center;
-  margin-top: 20%;
+  border: 1px solid black;
+  background-color: lightblue;
+  &:hover {
+    background-color: white;
+  }
 `;
 const Burger = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  margin: 5%;
+  /* display: flex;
+  justify-content: flex-end; */
+  margin: auto;
+  margin-right: 50px;
 `;
 
 export default UserMenu;

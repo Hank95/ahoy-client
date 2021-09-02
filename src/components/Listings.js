@@ -1,12 +1,18 @@
 import styled from "styled-components";
 import GoogleMap from "./GoogleMap";
 // import Map from "./Map";
+import ListingCard from "./boatDetails/ListingCard";
 
 const Listings = ({ boats, search, setSearch }) => {
   return (
     <Container>
-      <div>Listings</div>
-      <GoogleMap search={search} setSearch={setSearch} />
+      <div>
+        {boats.map((boat) => (
+          <ListingCard boat={boat} />
+        ))}
+      </div>
+      {/* <GoogleMap search={search} setSearch={setSearch} /> */}
+      <div>map</div>
     </Container>
   );
 };

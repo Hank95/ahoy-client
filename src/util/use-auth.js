@@ -25,7 +25,7 @@ function useProvideAuth() {
 
   function signin(username, password) {
     setIsLoading(true);
-    fetch(`${API_KEY}/login`, {
+    fetch("/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -45,7 +45,7 @@ function useProvideAuth() {
   function signup(signUpData) {
     setErrors([]);
     setIsLoading(true);
-    fetch(`${API_KEY}/signup`, {
+    fetch("/signup", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -54,23 +54,21 @@ function useProvideAuth() {
     }).then((r) => {
       setIsLoading(false);
       if (r.ok) {
-        r.json()
-          .then((user) => setUser(user))
-          .then(() => history.push("/"));
+        r.json().then((user) => setUser(user));
       } else {
         r.json().then((err) => setErrors(err.errors));
       }
     });
   }
   function signout() {
-    fetch(`${API_KEY}/logout`, { method: "DELETE" }).then((r) => {
+    fetch("/logout", { method: "DELETE" }).then((r) => {
       if (r.ok) {
-        setUser(null).then(() => history.push("/"));
+        setUser(null);
       }
     });
   }
   function autoSignIn() {
-    fetch(`${API_KEY}/me`).then((r) => {
+    fetch("/me").then((r) => {
       if (r.ok) {
         r.json().then((user) => setUser(user));
       }
