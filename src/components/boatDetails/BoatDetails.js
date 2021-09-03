@@ -2,17 +2,12 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
 
-const BoatDetails = () => {
+const BoatDetails = ({ myBookings, setMyBookings }) => {
   const [boatDetails, setBoatDetails] = useState([]);
   const [isLoaded, setIsLoaded] = useState(false);
   const [bookingDate, setBookingDate] = useState(0);
   const [passengers, setPassengers] = useState(0);
-  // const [bookingDetails, setBookingDetails] = useState({
-  //   date: "",
-  //   passengers: 2,
-  //   boat_id: boatDetails.id,
-  //   accepted: false,
-  // });
+  const [booked, setBooked] = useState(false);
 
   const id = useParams().id;
 
@@ -37,7 +32,10 @@ const BoatDetails = () => {
       }),
     })
       .then((res) => res.json())
-      .then((json) => console.log(json));
+      .then((json) => {
+        setMyBookings([...myBookings, json]);
+        setBooked(true);
+      });
   };
 
   // const handleChange = (event) => {
@@ -93,7 +91,16 @@ const BoatDetails = () => {
               />
             </FormField>
             <FormField>
-              <Button type="submit">Send Request</Button>
+              {booked ? (
+                <>
+                  <div>
+                    {boatDetails.title} has been booked for {bookingDate}!
+                  </div>
+                  <div>Please check you bookings for further details.</div>
+                </>
+              ) : (
+                <Button type="submit">Send Request</Button>
+              )}
             </FormField>
           </form>
         </Booking>

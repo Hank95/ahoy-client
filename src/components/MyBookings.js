@@ -12,11 +12,6 @@ const MyBookings = ({ myBookings, setMyBookings }) => {
   );
 };
 
-const Wrapper = styled.div`
-  margin: auto;
-  max-width: 65%;
-`;
-
 const MyBookingsCard = ({ myBooking }) => {
   const handleDate = (data) => {
     let date = data.split("-");
@@ -26,14 +21,56 @@ const MyBookingsCard = ({ myBooking }) => {
   };
 
   return (
-    <div>
-      <h5>
-        {handleDate(myBooking.date)} {myBooking.guests}
-      </h5>
+    <BookingCard>
+      <Info>
+        {handleDate(myBooking.date)}, {myBooking.guests} Guests
+      </Info>
 
       <ListingCard boat={myBooking.boat} />
-    </div>
+      <ActionButtons>
+        <Button onClick={null}>Edit</Button>
+        <Button onClick={null}>Cancel</Button>
+      </ActionButtons>
+    </BookingCard>
   );
 };
 
+const BookingCard = styled.div`
+  background-color: rgb(221, 241, 251);
+  border-radius: 6px;
+  padding: 12px;
+  margin-bottom: 20px;
+`;
+
+const Wrapper = styled.div`
+  margin: auto;
+  max-width: 65%;
+`;
+
+const Info = styled.div`
+  font-size: 1.5rem;
+  font-weight: 700;
+`;
+const Button = styled.button`
+  cursor: pointer;
+  font-size: 1.3rem;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  padding: 8px 16px;
+  text-decoration: none;
+  width: 100%;
+  background-color: rgba(58, 142, 216, 1);
+  display: flex;
+  justify-content: center;
+  align-self: center;
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+`;
+const ActionButtons = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 20px;
+`;
 export default MyBookings;

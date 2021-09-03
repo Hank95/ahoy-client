@@ -58,7 +58,7 @@ function App() {
           <Landing handleSearch={setSearch} />
         </Route>
         <PrivateRoute path="/listings/:id">
-          <BoatDetails />
+          <BoatDetails myBookings={myBookings} setMyBookings={setMyBookings} />
         </PrivateRoute>
         <PrivateRoute path="/listings">
           <Listings
