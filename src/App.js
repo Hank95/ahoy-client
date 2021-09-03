@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import axios from "axios";
 import { useAuth } from "./util/use-auth";
 import { Switch, Route, Redirect } from "react-router-dom";
 import Landing from "./components/Landing";
@@ -22,17 +23,17 @@ function App() {
   useEffect(() => {
     auth.autoSignIn();
 
-    fetch(API_KEY + "/bookings").then((r) => {
+    // fetch(API_KEY + "/bookings")
+    axios.get(API_KEY + "/bookings").then((r) => {
       if (r.ok) {
         r.json().then((data) => setMyBookings(data));
       }
     });
   }, []);
 
-  console.log(myBookings);
-
   useEffect(() => {
-    fetch(API_KEY + "/boats").then((r) => {
+    // fetch(API_KEY + "/boats")
+    axios.get(API_KEY + "/boats").then((r) => {
       if (r.ok) {
         r.json().then((data) => setBoats(data));
       }
@@ -44,8 +45,6 @@ function App() {
       setMyBoats(auth.user.boats);
     }
   }, [auth.user]);
-
-  console.log(boats);
 
   return (
     <div className="App">

@@ -1,5 +1,6 @@
 // Hook (use-auth.js)
 import React, { useState, useContext, createContext } from "react";
+import axios from "axios";
 // import { useHistory } from "react-router-dom";
 
 const API_KEY = process.env.REACT_APP_API_ENDPOINT;
@@ -25,53 +26,63 @@ function useProvideAuth() {
 
   function signin(username, password) {
     setIsLoading(true);
-    fetch(API_KEY + "/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ username, password }),
-    }).then((r) => {
-      setIsLoading(false);
-      if (r.ok) {
-        r.json().then((user) => {
-          setUser(user);
-        });
-      } else {
-        r.json().then((err) => setErrors(err.errors));
-      }
-    });
+    // fetch(API_KEY + "/login", {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify({ username, password }),
+    // })
+    axios
+      .post(
+        API_KEY + "/login",
+        { username: username, password: password },
+        { withCredentials: true }
+      )
+      .then((r) => {
+        setIsLoading(false);
+        console.log(r);
+        if (r.statusText === "Created") {
+          setUser(r.data);
+        } else {
+          // r.json().then((err) => setErrors(err.errors));
+          console.log(r);
+        }
+      });
   }
   function signup(signUpData) {
     setErrors([]);
     setIsLoading(true);
-    fetch(API_KEY + "/signup", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(signUpData),
-    }).then((r) => {
-      setIsLoading(false);
-      if (r.ok) {
-        r.json().then((user) => setUser(user));
-      } else {
-        r.json().then((err) => setErrors(err.errors));
-      }
-    });
+    // fetch(API_KEY + "/signup", {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify(signUpData),
+    // })
+    axios
+      .post(API_KEY + "/signup", { signUpData }, { withCredentials: true })
+      .then((r) => {
+        setIsLoading(false);
+        if (r.statusText === "Created") {
+          setUser(r.data);
+        } else {
+          // r.json().then((err) => setErrors(err.errors));
+          console.log(r);
+        }
+      });
   }
   function signout() {
-    fetch(API_KEY + "/logout", { method: "DELETE" }).then((r) => {
-      if (r.ok) {
-        setUser(null);
-      }
+    // fetch(API_KEY + "/logout", { method: "DELETE" })
+    axios.delete(API_KEY + "/logout").then(() => {
+      setUser(null);
     });
   }
   function autoSignIn() {
-    fetch(API_KEY + "/me").then((r) => {
-      if (r.ok) {
-        r.json().then((user) => setUser(user));
-      }
+    // fetch(API_KEY + "/me")
+    axios.get(API_KEY + "/me").then((r) => {
+      console.log(r);
+      setUser(r.data);
     });
   }
 
