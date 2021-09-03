@@ -29,8 +29,6 @@ function App() {
     });
   }, []);
 
-  console.log(myBookings);
-
   useEffect(() => {
     fetch("/boats").then((r) => {
       if (r.ok) {
@@ -45,8 +43,6 @@ function App() {
     }
   }, [auth.user]);
 
-  console.log(boats);
-
   return (
     <div className="App">
       <NavBar />
@@ -58,7 +54,11 @@ function App() {
           <Landing handleSearch={setSearch} />
         </Route>
         <PrivateRoute path="/listings/:id">
-          <BoatDetails myBookings={myBookings} setMyBookings={setMyBookings} />
+          <BoatDetails
+            myBookings={myBookings}
+            setMyBookings={setMyBookings}
+            myBoats={myBoats}
+          />
         </PrivateRoute>
         <PrivateRoute path="/listings">
           <Listings
