@@ -6,6 +6,7 @@ import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter } from "react-router-dom";
 import { createGlobalStyle } from "styled-components";
 import { ProvideAuth } from "./util/use-auth";
+require("dotenv").config();
 
 const GlobalStyle = createGlobalStyle`
 

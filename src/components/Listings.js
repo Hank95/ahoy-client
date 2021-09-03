@@ -8,7 +8,7 @@ const Listings = ({ boats, search, setSearch }) => {
     <Container>
       <div>
         {boats.map((boat) => (
-          <ListingCard boat={boat} />
+          <ListingCard key={boat.id} boat={boat} />
         ))}
       </div>
       {/* <GoogleMap search={search} setSearch={setSearch} /> */}

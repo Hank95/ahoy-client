@@ -9,16 +9,27 @@ import AddBoat from "./components/boatForms/AddBoat";
 import BoatDetails from "./components/boatDetails/BoatDetails";
 import MyBoats from "./components/MyBoats";
 import EditMyBoats from "./components/boatForms/EditMyBoats";
+import MyBookings from "./components/MyBookings";
 
 function App() {
   const [search, setSearch] = useState(null);
   const [boats, setBoats] = useState([]);
   const [myBoats, setMyBoats] = useState([]);
+  const [myBookings, setMyBookings] = useState([]);
+  // const API_KEY = process.env.REACT_APP_API_ENDPOINT;
 
   const auth = useAuth();
   useEffect(() => {
     auth.autoSignIn();
+
+    fetch("/bookings").then((r) => {
+      if (r.ok) {
+        r.json().then((data) => setMyBookings(data));
+      }
+    });
   }, []);
+
+  console.log(myBookings);
 
   useEffect(() => {
     fetch("/boats").then((r) => {
@@ -34,7 +45,7 @@ function App() {
     }
   }, [auth.user]);
 
-  console.log(myBoats);
+  console.log(boats);
 
   return (
     <div className="App">
@@ -56,6 +67,9 @@ function App() {
             boats={boats}
             setBoats={setBoats}
           />
+        </PrivateRoute>
+        <PrivateRoute path="/my-bookings">
+          <MyBookings myBookings={myBookings} setMyBookings={setMyBookings} />
         </PrivateRoute>
         <PrivateRoute path="/add-a-boat">
           <AddBoat
@@ -94,7 +108,7 @@ function PrivateRoute({ children, ...rest }) {
         ) : (
           <Redirect
             to={{
-              pathname: "/login",
+              pathname: "/",
               state: { from: location },
             }}
           />

@@ -32,7 +32,7 @@ const Container = styled.header`
   justify-content: center;
   align-items: center;
   padding: 8px;
-  height: 150px;
+  height: 100px;
   border-bottom: 4px solid rgb(47, 98, 104);
 `;
 
@@ -40,7 +40,7 @@ const Nav = styled.nav`
   display: flex;
   gap: 4px;
   position: absolute;
-  top: 50px;
+  top: 40px;
   right: 20px;
 `;
 

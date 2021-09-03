@@ -19,6 +19,7 @@ const UserMenu = () => {
       {isClicked ? (
         <Container>
           <Burger>
+            <Username>{auth.user.username}</Username>
             <img src={arrow} alt="burger" onClick={handleClick} />
           </Burger>
           <GridItem>
@@ -28,7 +29,7 @@ const UserMenu = () => {
             </Link>
           </GridItem>
           <GridItem>
-            <Link to="/" onClick={handleClick}>
+            <Link to="/my-bookings" onClick={handleClick}>
               {" "}
               Bookings
             </Link>
@@ -59,6 +60,7 @@ const UserMenu = () => {
         </Container>
       ) : (
         <Burger>
+          <Username>{auth.user.username}</Username>
           <img src={menu} alt="menu" onClick={() => setIsClicked(true)} />
         </Burger>
       )}
@@ -80,16 +82,26 @@ const GridItem = styled.div`
   align-content: center;
   text-align: center;
   border: 1px solid black;
-  background-color: lightblue;
+  background-color: rgb(58, 142, 216);
   &:hover {
     background-color: white;
   }
 `;
+const Username = styled.div`
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-right: 8px;
+`;
 const Burger = styled.div`
-  /* display: flex;
-  justify-content: flex-end; */
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+
   margin: auto;
   margin-right: 50px;
+  border: 1px solid black;
+  border-radius: 10px;
+  padding: 0.5em 0.5em 0.5em;
 `;
 
 export default UserMenu;

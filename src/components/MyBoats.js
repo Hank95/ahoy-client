@@ -28,7 +28,7 @@ const MyBoats = ({ myBoats, setMyBoats }) => {
     <Wrapper>
       <h1>My Boats!</h1>
       {myBoats.map((boat) => (
-        <MyBoatCard boat={boat} handleDelete={handleDelete} />
+        <MyBoatCard key={boat.id} boat={boat} handleDelete={handleDelete} />
       ))}
       <Button as={Link} to="/add-a-boat">
         {" "}

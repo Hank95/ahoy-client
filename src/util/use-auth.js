@@ -1,8 +1,8 @@
 // Hook (use-auth.js)
 import React, { useState, useContext, createContext } from "react";
-import { useHistory } from "react-router-dom";
+// import { useHistory } from "react-router-dom";
 
-const API_KEY = process.env.REACT_APP_API_ENDPOINT;
+// const API_KEY = process.env.REACT_APP_API_ENDPOINT;
 
 const authContext = createContext();
 // Provider component that wraps your app and makes auth object ...
@@ -21,7 +21,7 @@ function useProvideAuth() {
   const [user, setUser] = useState(null);
   const [errors, setErrors] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const history = useHistory();
+  // const history = useHistory();
 
   function signin(username, password) {
     setIsLoading(true);
