@@ -16,13 +16,13 @@ function App() {
   const [boats, setBoats] = useState([]);
   const [myBoats, setMyBoats] = useState([]);
   const [myBookings, setMyBookings] = useState([]);
-  // const API_KEY = process.env.REACT_APP_API_ENDPOINT;
+  const API_KEY = process.env.REACT_APP_API_ENDPOINT;
 
   const auth = useAuth();
   useEffect(() => {
     auth.autoSignIn();
 
-    fetch("/bookings").then((r) => {
+    fetch(API_KEY + "/bookings").then((r) => {
       if (r.ok) {
         r.json().then((data) => setMyBookings(data));
       }
@@ -32,7 +32,7 @@ function App() {
   console.log(myBookings);
 
   useEffect(() => {
-    fetch("/boats").then((r) => {
+    fetch(API_KEY + "/boats").then((r) => {
       if (r.ok) {
         r.json().then((data) => setBoats(data));
       }

@@ -2,7 +2,7 @@
 import React, { useState, useContext, createContext } from "react";
 // import { useHistory } from "react-router-dom";
 
-// const API_KEY = process.env.REACT_APP_API_ENDPOINT;
+const API_KEY = process.env.REACT_APP_API_ENDPOINT;
 
 const authContext = createContext();
 // Provider component that wraps your app and makes auth object ...
@@ -25,7 +25,7 @@ function useProvideAuth() {
 
   function signin(username, password) {
     setIsLoading(true);
-    fetch("/login", {
+    fetch(API_KEY + "/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -45,7 +45,7 @@ function useProvideAuth() {
   function signup(signUpData) {
     setErrors([]);
     setIsLoading(true);
-    fetch("/signup", {
+    fetch(API_KEY + "/signup", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -61,14 +61,14 @@ function useProvideAuth() {
     });
   }
   function signout() {
-    fetch("/logout", { method: "DELETE" }).then((r) => {
+    fetch(API_KEY + "/logout", { method: "DELETE" }).then((r) => {
       if (r.ok) {
         setUser(null);
       }
     });
   }
   function autoSignIn() {
-    fetch("/me").then((r) => {
+    fetch(API_KEY + "/me").then((r) => {
       if (r.ok) {
         r.json().then((user) => setUser(user));
       }
