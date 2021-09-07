@@ -43,6 +43,7 @@ function App() {
     }
   }, [auth.user]);
 
+  console.log(boats);
   return (
     <div className="App">
       <NavBar />

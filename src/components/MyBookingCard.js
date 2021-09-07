@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import ListingCard from "./boatDetails/ListingCard";
 
-const MyBookingsCard = ({ myBooking, handleDelete }) => {
+const MyBookingsCard = ({ myBooking, handleDelete, handleUpdate }) => {
   const [editing, setEditing] = useState(false);
   const [bookingDate, setBookingDate] = useState(myBooking.date);
   const [passengers, setPassengers] = useState(myBooking.guests);
@@ -15,7 +15,14 @@ const MyBookingsCard = ({ myBooking, handleDelete }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(e);
+    handleUpdate(
+      {
+        date: bookingDate,
+        guests: passengers,
+        boat_id: myBooking.id,
+      },
+      myBooking.id
+    );
   };
 
   return (
@@ -31,7 +38,9 @@ const MyBookingsCard = ({ myBooking, handleDelete }) => {
         ) : (
           <Button onClick={() => setEditing(true)}>Edit</Button>
         )}
-        <Button onClick={null}>Cancel Booking</Button>
+        <Button onClick={() => handleDelete(myBooking.id)}>
+          Cancel Booking
+        </Button>
       </ActionButtons>
       {editing ? (
         <form onSubmit={handleSubmit}>
