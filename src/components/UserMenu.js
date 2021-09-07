@@ -72,6 +72,7 @@ const Container = styled.div`
   display: grid;
   grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
   border-radius: 6px;
+  z-index: 200;
 `;
 const GridItem = styled.div`
   font-size: 15pt;

@@ -41,7 +41,7 @@ const Nav = styled.nav`
   gap: 4px;
   position: absolute;
   top: 40px;
-  right: 20px;
+  left: 20px;
 `;
 
 const NavButton = styled.button`

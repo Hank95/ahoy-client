@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useAuth } from "./util/use-auth";
 import { Switch, Route, Redirect } from "react-router-dom";
+import { useLoadScript } from "@react-google-maps/api";
 import Landing from "./components/Landing";
 import NavBar from "./components/NavBar";
 import Login from "./components/auth/Login";
@@ -11,12 +12,20 @@ import MyBoats from "./components/MyBoats";
 import EditMyBoats from "./components/boatForms/EditMyBoats";
 import MyBookings from "./components/MyBookings";
 
+const GOOGLE_KEY = `${process.env.REACT_APP_API_KEY}`;
+
+const libraries = ["places"];
+
 function App() {
   const [search, setSearch] = useState(null);
   const [boats, setBoats] = useState([]);
   const [myBoats, setMyBoats] = useState([]);
   const [myBookings, setMyBookings] = useState([]);
   // const API_KEY = process.env.REACT_APP_API_ENDPOINT;
+  const { isLoaded, loadError } = useLoadScript({
+    googleMapsApiKey: GOOGLE_KEY,
+    libraries,
+  });
 
   const auth = useAuth();
   useEffect(() => {
@@ -42,8 +51,10 @@ function App() {
       setMyBoats(auth.user.boats);
     }
   }, [auth.user]);
+  console.log(search);
+  if (loadError) return "Error loading searchbar";
 
-  console.log(boats);
+  if (!isLoaded) return "Loading map";
   return (
     <div className="App">
       <NavBar />
@@ -52,7 +63,7 @@ function App() {
           <Login />
         </Route>
         <Route exact path="/">
-          <Landing handleSearch={setSearch} />
+          <Landing setSearch={setSearch} />
         </Route>
         <PrivateRoute path="/listings/:id">
           <BoatDetails
