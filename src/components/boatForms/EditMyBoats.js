@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
+import Geocode from "react-geocode";
 import BoatForm from "./BoatForm";
 
 const EditMyBoats = ({ boats, setBoats, myBoats, setMyBoats }) => {
@@ -25,6 +26,8 @@ const EditMyBoats = ({ boats, setBoats, myBoats, setMyBoats }) => {
     food: "",
     extras: "",
     location: "",
+    lat: "",
+    long: "",
   });
 
   const [isLoaded, setIsLoaded] = useState(false);
@@ -51,26 +54,30 @@ const EditMyBoats = ({ boats, setBoats, myBoats, setMyBoats }) => {
     return updatedBoats;
   };
 
-  const handleSubmit = (e) => {
+  async function handleSubmit(e) {
     e.preventDefault();
     setIsLoading(true);
     setErrors([]);
-    fetch(`/boats/${id}`, {
+
+    let response = await Geocode.fromAddress(boatData.location);
+    const { lat, lng } = await response.results[0].geometry.location;
+
+    let coordsData = { ...boatData, lat: lat, long: lng };
+
+    let fetchRes = await fetch(`/boats/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(boatData),
-    }).then((r) => {
-      setIsLoading(false);
-      if (r.ok) {
-        r.json().then((data) => {
-          setMyBoats(() => handleUpdate(myBoats, data));
-          setBoats(() => handleUpdate(boats, data));
-        });
-      } else {
-        r.json().then((err) => setErrors(err.errors));
-      }
+      body: JSON.stringify(coordsData),
     });
-  };
+
+    if (!fetchRes.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    let json = await fetchRes.json();
+    setIsLoading(false);
+    setMyBoats(() => handleUpdate(myBoats, json));
+    setBoats(() => handleUpdate(boats, json));
+  }
 
   function handleChange(event) {
     const target = event.target;

@@ -8,7 +8,6 @@ Geocode.setApiKey(process.env.REACT_APP_API_KEY);
 const AddBoat = ({ myBoats, setMyBoats, boats, setBoats }) => {
   const [errors, setErrors] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [coords, setCoords] = useState(null);
   const [boatData, setBoatData] = useState({
     title: "",
     description: "",
@@ -32,52 +31,46 @@ const AddBoat = ({ myBoats, setMyBoats, boats, setBoats }) => {
     long: "",
   });
 
-  // useEffect(() => {
-  //   // Get latitude & longitude from address.
-  //   Geocode.fromAddress(boatData.location).then(
-  //     (response) => {
-  //       const { lat, lng } = response.results[0].geometry.location;
-  //       console.log(lat, lng);
-  //       setBoatData({ ...boatData, lat: lat, long: lng });
-  //     },
-  //     (error) => {
-  //       console.error(error);
-  //     }
-  //   );
-  // }, [boatData.location]);
-  const handleSubmit = (e) => {
+  async function handleSubmit(e) {
     e.preventDefault();
     setIsLoading(true);
     setErrors([]);
-    Geocode.fromAddress(boatData.location)
-      .then(
-        (response) => {
-          const { lat, lng } = response.results[0].geometry.location;
-          console.log(lat, lng);
-          setBoatData({ ...boatData, lat: lat, long: lng });
-        },
-        (error) => {
-          console.error(error);
-        }
-      )
-      .then(
-        fetch("/boats", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(boatData),
-        }).then((r) => {
-          setIsLoading(false);
-          if (r.ok) {
-            r.json().then((data) => {
-              setBoats([...boats, data]);
-              setMyBoats([...myBoats, data]);
-            });
-          } else {
-            r.json().then((err) => setErrors(err.errors));
-          }
-        })
-      );
-  };
+
+    let response = await Geocode.fromAddress(boatData.location);
+    const { lat, lng } = await response.results[0].geometry.location;
+
+    let coordsData = { ...boatData, lat: lat, long: lng };
+
+    let fetchRes = await fetch(`/boats`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(coordsData),
+    });
+
+    if (!fetchRes.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    let json = await fetchRes.json();
+    setIsLoading(false);
+    setBoats([...boats, json]);
+    setMyBoats([...myBoats, json]);
+
+    // fetch("/boats", {
+    //   method: "POST",
+    //   headers: { "Content-Type": "application/json" },
+    //   body: JSON.stringify(boatData),
+    // }).then((r) => {
+    //   setIsLoading(false);
+    //   if (r.ok) {
+    //     r.json().then((data) => {
+    //       setBoats([...boats, data]);
+    //       setMyBoats([...myBoats, data]);
+    //     });
+    //   } else {
+    //     r.json().then((err) => setErrors(err.errors));
+    //   }
+    // });
+  }
 
   function handleChange(event) {
     const target = event.target;
