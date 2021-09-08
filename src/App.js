@@ -15,6 +15,7 @@ import MyBookings from "./components/MyBookings";
 const GOOGLE_KEY = `${process.env.REACT_APP_API_KEY}`;
 
 const libraries = ["places"];
+// const API_KEY = process.env.REACT_APP_API_ENDPOINT;
 
 function App() {
   const [search, setSearch] = useState(null);

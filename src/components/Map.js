@@ -39,8 +39,7 @@ const options = {
   zoomControl: true,
 };
 
-function Map({ search, boats }) {
-  const [markers, setMarkers] = useState([]);
+function Map({ search, boats, setBoatsInBounds }) {
   const [selected, setSelected] = useState(null);
   const [center, setCenter] = useState({
     lat: 41.4605,
@@ -62,8 +61,12 @@ function Map({ search, boats }) {
   }, []);
 
   const changeBounds = () => {
-    const bounds = mapRef.current.getBounds().toJSON();
-    console.log(bounds);
+    const mapBounds = mapRef.current.getBounds().toJSON();
+    fetch(
+      `/bounds?min_lat=${mapBounds.south}&max_lat=${mapBounds.north}&min_lng=${mapBounds.west}&max_lng=${mapBounds.east}`
+    )
+      .then((response) => response.json())
+      .then((json) => setBoatsInBounds(json));
   };
 
   useEffect(() => {
@@ -99,20 +102,21 @@ function Map({ search, boats }) {
               anchor: new window.google.maps.Point(15, 15),
               scaledSize: new window.google.maps.Size(30, 30),
             }}
-          />
-        ))}
-        {selected ? (
-          <InfoWindow
-            position={{ lat: selected.lat, lng: selected.lng }}
-            onCloseClick={() => {
-              setSelected(null);
-            }}
           >
-            <div>
-              <h2>Boat</h2>
-            </div>
-          </InfoWindow>
-        ) : null}
+            {selected ? (
+              <InfoWindow
+                position={{ lat: selected.lat, lng: selected.lng }}
+                onCloseClick={() => {
+                  setSelected(null);
+                }}
+              >
+                <div>
+                  <h2>Boat</h2>
+                </div>
+              </InfoWindow>
+            ) : null}
+          </Marker>
+        ))}
       </GoogleMap>
     </div>
   );
