@@ -1,31 +1,18 @@
 import React, { useState } from "react";
-import { Link, useHistory } from "react-router-dom";
+// import { Link, useHistory } from "react-router-dom";
 import styled from "styled-components";
 import { useAuth } from "../util/use-auth";
 import dock from "./assets/dock.jpeg";
+import SearchBar from "./SearchBar";
 
-const Landing = ({ handleSearch }) => {
-  const [landingSearch, setLandingSearch] = useState(null);
-
-  const auth = useAuth();
-  const history = useHistory();
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    handleSearch(landingSearch);
-    if (auth.user) {
-      history.push("/listings");
-    } else {
-      history.push("/login");
-    }
-  };
-
+const Landing = ({ setSearch }) => {
   return (
     <div>
       <Image src={dock} alt="Peaceful dock" />
 
       <Container>
-        <form onSubmit={handleSubmit}>
+        <SearchBar setSearch={setSearch} />
+        {/* <form onSubmit={handleSubmit}>
           <FormField>
             <Label htmlFor="username">Where are we going?</Label>
             <Input
@@ -39,7 +26,7 @@ const Landing = ({ handleSearch }) => {
           <FormField>
             <Button type="submit">Search</Button>
           </FormField>
-        </form>
+        </form> */}
       </Container>
     </div>
   );

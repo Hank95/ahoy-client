@@ -1,19 +1,22 @@
 import styled from "styled-components";
-import GoogleMap from "./GoogleMap";
-// import Map from "./Map";
+import Map from "./Map";
 import ListingCard from "./boatDetails/ListingCard";
+import SearchBar from "./SearchBar";
 
 const Listings = ({ boats, search, setSearch }) => {
   return (
-    <Container>
-      <div>
-        {boats.map((boat) => (
-          <ListingCard key={boat.id} boat={boat} />
-        ))}
-      </div>
-      {/* <GoogleMap search={search} setSearch={setSearch} /> */}
-      <div>map</div>
-    </Container>
+    <>
+      <SearchBar setSearch={setSearch} />
+      <Container>
+        <div>
+          {boats.map((boat) => (
+            <ListingCard key={boat.id} boat={boat} />
+          ))}
+        </div>
+        {/* <div>map</div> */}
+        <Map search={search} boats={boats} />
+      </Container>
+    </>
   );
 };
 

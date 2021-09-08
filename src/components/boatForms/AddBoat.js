@@ -1,6 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+import Geocode from "react-geocode";
 import BoatForm from "./BoatForm";
+
+Geocode.setApiKey(process.env.REACT_APP_API_KEY);
 
 const AddBoat = ({ myBoats, setMyBoats, boats, setBoats }) => {
   const [errors, setErrors] = useState([]);
@@ -24,27 +27,50 @@ const AddBoat = ({ myBoats, setMyBoats, boats, setBoats }) => {
     food: "",
     extras: "",
     location: "",
+    lat: "",
+    long: "",
   });
-  const handleSubmit = (e) => {
+
+  async function handleSubmit(e) {
     e.preventDefault();
     setIsLoading(true);
     setErrors([]);
-    fetch("/boats", {
+
+    let response = await Geocode.fromAddress(boatData.location);
+    const { lat, lng } = await response.results[0].geometry.location;
+
+    let coordsData = { ...boatData, lat: lat, long: lng };
+
+    let fetchRes = await fetch(`/boats`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(boatData),
-    }).then((r) => {
-      setIsLoading(false);
-      if (r.ok) {
-        r.json().then((data) => {
-          setBoats([...boats, data]);
-          setMyBoats([...myBoats, data]);
-        });
-      } else {
-        r.json().then((err) => setErrors(err.errors));
-      }
+      body: JSON.stringify(coordsData),
     });
-  };
+
+    if (!fetchRes.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    let json = await fetchRes.json();
+    setIsLoading(false);
+    setBoats([...boats, json]);
+    setMyBoats([...myBoats, json]);
+
+    // fetch("/boats", {
+    //   method: "POST",
+    //   headers: { "Content-Type": "application/json" },
+    //   body: JSON.stringify(boatData),
+    // }).then((r) => {
+    //   setIsLoading(false);
+    //   if (r.ok) {
+    //     r.json().then((data) => {
+    //       setBoats([...boats, data]);
+    //       setMyBoats([...myBoats, data]);
+    //     });
+    //   } else {
+    //     r.json().then((err) => setErrors(err.errors));
+    //   }
+    // });
+  }
 
   function handleChange(event) {
     const target = event.target;
@@ -56,6 +82,7 @@ const AddBoat = ({ myBoats, setMyBoats, boats, setBoats }) => {
     });
   }
 
+  console.log(boatData);
   return (
     <Page>
       <Wrapper>

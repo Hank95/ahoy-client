@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
 
-const BoatDetails = ({ myBookings, setMyBookings }) => {
+const BoatDetails = ({ myBookings, setMyBookings, myBoats }) => {
   const [boatDetails, setBoatDetails] = useState([]);
   const [isLoaded, setIsLoaded] = useState(false);
   const [bookingDate, setBookingDate] = useState(0);
@@ -19,8 +19,13 @@ const BoatDetails = ({ myBookings, setMyBookings }) => {
         setIsLoaded(true);
       });
   }, [id]);
+  console.log(myBoats);
+  console.log(boatDetails);
 
   const handleSubmit = (e) => {
+    if (myBoats.includes(boatDetails)) {
+      return alert("This is your boat");
+    }
     e.preventDefault();
     fetch("/bookings", {
       method: "POST",
