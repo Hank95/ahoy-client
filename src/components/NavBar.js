@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { NavLink, Link } from "react-router-dom";
 import { useAuth } from "../util/use-auth";
 import UserMenu from "./UserMenu";
+import ahoy from "./assets/Ahoy.svg";
 
 const NavBar = () => {
   const auth = useAuth();
@@ -9,7 +10,7 @@ const NavBar = () => {
   return (
     <Container>
       <NavLink to="/">
-        <h1>AHOY</h1>
+        <Logo src={ahoy} alt="ahoy" />
       </NavLink>
 
       {!auth.user ? (
@@ -33,7 +34,8 @@ const Container = styled.header`
   align-items: center;
   padding: 8px;
   height: 100px;
-  border-bottom: 4px solid rgb(47, 98, 104);
+  background-color: rgb(28, 61, 126);
+  /* border-bottom: 4px solid rgb(47, 98, 104); */
 `;
 
 const Nav = styled.nav`
@@ -58,6 +60,10 @@ const NavButton = styled.button`
   &:hover {
     box-shadow: 0px 0px 15px 0px #848484;
   }
+`;
+
+const Logo = styled.img`
+  margin-top: 16px;
 `;
 
 export default NavBar;

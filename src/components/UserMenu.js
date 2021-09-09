@@ -97,6 +97,7 @@ const Burger = styled.div`
   display: flex;
   justify-content: flex-end;
   align-items: center;
+  background-color: rgb(255, 255, 255);
 
   margin: auto;
   margin-right: 50px;
