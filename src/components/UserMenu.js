@@ -17,7 +17,7 @@ const UserMenu = () => {
   return (
     <div>
       {isClicked ? (
-        <Container>
+        <Container onMouseLeave={handleClick}>
           <Burger>
             <Username>{auth.user.username}</Username>
             <img src={arrow} alt="burger" onClick={handleClick} />

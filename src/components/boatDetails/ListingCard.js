@@ -1,10 +1,15 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 
-const ListingCard = ({ boat }) => {
+const ListingCard = ({ boat, setSelected }) => {
   const src = `/listings/${boat.id}`;
   return (
-    <Card as={Link} to={src}>
+    <Card
+      as={Link}
+      to={src}
+      onMouseEnter={() => setSelected(boat)}
+      onMouseLeave={() => setSelected(null)}
+    >
       <Image>AHOY!</Image>
       <Content>
         <h2>{boat.title}</h2>

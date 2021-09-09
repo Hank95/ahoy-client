@@ -39,8 +39,8 @@ const options = {
   zoomControl: true,
 };
 
-function Map({ search, boats, setBoatsInBounds }) {
-  const [selected, setSelected] = useState(null);
+function Map({ search, boats, setBoatsInBounds, selected, setSelected }) {
+  // const [selected, setSelected] = useState(null);
   const [center, setCenter] = useState({
     lat: 41.4605,
     lng: -76.57959,
@@ -73,6 +73,8 @@ function Map({ search, boats, setBoatsInBounds }) {
     setCenter(search);
   }, [search]);
 
+  console.log(selected);
+
   if (loadError) return "Error loading map";
 
   if (!isLoaded) return "Loading map";
@@ -91,21 +93,22 @@ function Map({ search, boats, setBoatsInBounds }) {
       >
         {boats.map((marker) => (
           <Marker
-            key={`${marker.lat}-${marker.lng}`}
+            key={`${marker.lat}-${marker.long}`}
             position={{ lat: marker.lat, lng: marker.long }}
             onClick={() => {
+              console.log(marker);
               setSelected(marker);
             }}
-            icon={{
-              url: { anchor },
-              origin: new window.google.maps.Point(0, 0),
-              anchor: new window.google.maps.Point(15, 15),
-              scaledSize: new window.google.maps.Size(30, 30),
-            }}
+            // icon={{
+            //   url: "./assets/anchor.svg",
+            //   origin: new window.google.maps.Point(0, 0),
+            //   anchor: new window.google.maps.Point(15, 15),
+            //   scaledSize: new window.google.maps.Size(30, 30),
+            // }}
           >
-            {selected ? (
+            {selected === marker ? (
               <InfoWindow
-                position={{ lat: selected.lat, lng: selected.lng }}
+                position={{ lat: selected.lat, lng: selected.long }}
                 onCloseClick={() => {
                   setSelected(null);
                 }}

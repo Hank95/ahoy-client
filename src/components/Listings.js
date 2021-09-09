@@ -5,23 +5,9 @@ import ListingCard from "./boatDetails/ListingCard";
 import SearchBar from "./SearchBar";
 
 const Listings = ({ boats, search, setSearch }) => {
-  const [mapBounds, setMapBounds] = useState({
-    south: "",
-    west: "",
-    north: "",
-    east: "",
-  });
   const [boatsInBounds, setBoatsInBounds] = useState([]);
-  console.log(boatsInBounds);
-  console.log(boats);
-
-  // useEffect(() => {
-  //   fetch(
-  //     `/bounds?min_lat=${mapBounds.south}&max_lat=${mapBounds.north}&min_lng=${mapBounds.west}&max_lng=${mapBounds.east}`
-  //   )
-  //     .then((response) => response.json())
-  //     .then((json) => setBoatsInBounds(json));
-  // }, [mapBounds]);
+  const [selected, setSelected] = useState(null);
+  console.log(selected);
 
   return (
     <>
@@ -29,7 +15,7 @@ const Listings = ({ boats, search, setSearch }) => {
       <Container>
         <div>
           {boatsInBounds.map((boat) => (
-            <ListingCard key={boat.id} boat={boat} />
+            <ListingCard key={boat.id} boat={boat} setSelected={setSelected} />
           ))}
         </div>
         {/* <div>map</div> */}
@@ -37,6 +23,8 @@ const Listings = ({ boats, search, setSearch }) => {
           search={search}
           boats={boatsInBounds}
           setBoatsInBounds={setBoatsInBounds}
+          selected={selected}
+          setSelected={setSelected}
         />
       </Container>
     </>
